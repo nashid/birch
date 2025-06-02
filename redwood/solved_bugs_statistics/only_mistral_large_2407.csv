@@ -1,7 +1,0 @@
-bug_id,divergence,proximity_class
-Codec-6,0.4685,Nucleus
-Gson-4,0.5309,Orbit
-Lang-63,0.2535,Cluster
-Lang-8,0.4701,Cluster
-Math-62,0.3868,Cluster
-TOTAL,0.4220,Nucleus:1; Orbit:1; Cluster:3
