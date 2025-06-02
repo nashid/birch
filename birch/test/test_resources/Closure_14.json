@@ -1,0 +1,67 @@
+{
+    "Closure_14": {
+        "buggy_hunks": {
+            "0": {
+                "start_line": 767,
+                "end_line": 768,
+                "file": "src/com/google/javascript/jscomp/ControlFlowAnalysis.java",
+                "code": "<START_BUG>\n              cfa.createEdge(fromNode, Branch.UNCOND, finallyNode);\n            }\n<END_BUG>"
+            }
+        },
+        "buggy_code": {
+            "0": {
+                "start_line": 692,
+                "end_line": 789,
+                "file": "src/com/google/javascript/jscomp/ControlFlowAnalysis.java",
+                "code": "private static Node computeFollowNode(\n    Node fromNode, Node node, ControlFlowAnalysis cfa) {\n  /*\n   * This is the case where:\n   *\n   * 1. Parent is null implies that we are transferring control to the end of\n   * the script.\n   *\n   * 2. Parent is a function implies that we are transferring control back to\n   * the caller of the function.\n   *\n   * 3. If the node is a return statement, we should also transfer control\n   * back to the caller of the function.\n   *\n   * 4. If the node is root then we have reached the end of what we have been\n   * asked to traverse.\n   *\n   * In all cases we should transfer control to a \"symbolic return\" node.\n   * This will make life easier for DFAs.\n   */\n  Node parent = node.getParent();\n  if (parent == null || parent.isFunction() ||\n      (cfa != null && node == cfa.root)) {\n    return null;\n  }\n\n  // If we are just before a IF/WHILE/DO/FOR:\n  switch (parent.getType()) {\n    // The follow() of any of the path from IF would be what follows IF.\n    case Token.IF:\n      return computeFollowNode(fromNode, parent, cfa);\n    case Token.CASE:\n    case Token.DEFAULT_CASE:\n      // After the body of a CASE, the control goes to the body of the next\n      // case, without having to go to the case condition.\n      if (parent.getNext() != null) {\n        if (parent.getNext().isCase()) {\n          return parent.getNext().getFirstChild().getNext();\n        } else if (parent.getNext().isDefaultCase()) {\n          return parent.getNext().getFirstChild();\n        } else {\n          Preconditions.checkState(false, \"Not reachable\");\n        }\n      } else {\n        return computeFollowNode(fromNode, parent, cfa);\n      }\n      break;\n    case Token.FOR:\n      if (NodeUtil.isForIn(parent)) {\n        return parent;\n      } else {\n        return parent.getFirstChild().getNext().getNext();\n      }\n    case Token.WHILE:\n    case Token.DO:\n      return parent;\n    case Token.TRY:\n      // If we are coming out of the TRY block...\n      if (parent.getFirstChild() == node) {\n        if (NodeUtil.hasFinally(parent)) { // and have FINALLY block.\n          return computeFallThrough(parent.getLastChild());\n        } else { // and have no FINALLY.\n          return computeFollowNode(fromNode, parent, cfa);\n        }\n      // CATCH block.\n      } else if (NodeUtil.getCatchBlock(parent) == node){\n        if (NodeUtil.hasFinally(parent)) { // and have FINALLY block.\n          return computeFallThrough(node.getNext());\n        } else {\n          return computeFollowNode(fromNode, parent, cfa);\n        }\n      // If we are coming out of the FINALLY block...\n      } else if (parent.getLastChild() == node){\n        if (cfa != null) {\n          for (Node finallyNode : cfa.finallyMap.get(parent)) {\n            cfa.createEdge(fromNode, Branch.UNCOND, finallyNode);\n          }\n        }\n        return computeFollowNode(fromNode, parent, cfa);\n      }\n  }\n\n  // Now that we are done with the special cases follow should be its\n  // immediate sibling, unless its sibling is a function\n  Node nextSibling = node.getNext();\n\n  // Skip function declarations because control doesn't get pass into it.\n  while (nextSibling != null && nextSibling.isFunction()) {\n    nextSibling = nextSibling.getNext();\n  }\n\n  if (nextSibling != null) {\n    return computeFallThrough(nextSibling);\n  } else {\n    // If there are no more siblings, control is transferred up the AST.\n    return computeFollowNode(fromNode, parent, cfa);\n  }\n}"
+            }
+        },
+        "delineated_bug": {
+            "0": {
+                "start_line": 692,
+                "end_line": 789,
+                "file": "src/com/google/javascript/jscomp/ControlFlowAnalysis.java",
+                "code": "private static Node computeFollowNode(\n    Node fromNode, Node node, ControlFlowAnalysis cfa) {\n  /*\n   * This is the case where:\n   *\n   * 1. Parent is null implies that we are transferring control to the end of\n   * the script.\n   *\n   * 2. Parent is a function implies that we are transferring control back to\n   * the caller of the function.\n   *\n   * 3. If the node is a return statement, we should also transfer control\n   * back to the caller of the function.\n   *\n   * 4. If the node is root then we have reached the end of what we have been\n   * asked to traverse.\n   *\n   * In all cases we should transfer control to a \"symbolic return\" node.\n   * This will make life easier for DFAs.\n   */\n  Node parent = node.getParent();\n  if (parent == null || parent.isFunction() ||\n      (cfa != null && node == cfa.root)) {\n    return null;\n  }\n\n  // If we are just before a IF/WHILE/DO/FOR:\n  switch (parent.getType()) {\n    // The follow() of any of the path from IF would be what follows IF.\n    case Token.IF:\n      return computeFollowNode(fromNode, parent, cfa);\n    case Token.CASE:\n    case Token.DEFAULT_CASE:\n      // After the body of a CASE, the control goes to the body of the next\n      // case, without having to go to the case condition.\n      if (parent.getNext() != null) {\n        if (parent.getNext().isCase()) {\n          return parent.getNext().getFirstChild().getNext();\n        } else if (parent.getNext().isDefaultCase()) {\n          return parent.getNext().getFirstChild();\n        } else {\n          Preconditions.checkState(false, \"Not reachable\");\n        }\n      } else {\n        return computeFollowNode(fromNode, parent, cfa);\n      }\n      break;\n    case Token.FOR:\n      if (NodeUtil.isForIn(parent)) {\n        return parent;\n      } else {\n        return parent.getFirstChild().getNext().getNext();\n      }\n    case Token.WHILE:\n    case Token.DO:\n      return parent;\n    case Token.TRY:\n      // If we are coming out of the TRY block...\n      if (parent.getFirstChild() == node) {\n        if (NodeUtil.hasFinally(parent)) { // and have FINALLY block.\n          return computeFallThrough(parent.getLastChild());\n        } else { // and have no FINALLY.\n          return computeFollowNode(fromNode, parent, cfa);\n        }\n      // CATCH block.\n      } else if (NodeUtil.getCatchBlock(parent) == node){\n        if (NodeUtil.hasFinally(parent)) { // and have FINALLY block.\n          return computeFallThrough(node.getNext());\n        } else {\n          return computeFollowNode(fromNode, parent, cfa);\n        }\n      // If we are coming out of the FINALLY block...\n      } else if (parent.getLastChild() == node){\n        if (cfa != null) {\n          for (Node finallyNode : cfa.finallyMap.get(parent)) {\n<START_BUG>\n            cfa.createEdge(fromNode, Branch.UNCOND, finallyNode);\n          }\n<END_BUG>\n        }\n        return computeFollowNode(fromNode, parent, cfa);\n      }\n  }\n\n  // Now that we are done with the special cases follow should be its\n  // immediate sibling, unless its sibling is a function\n  Node nextSibling = node.getNext();\n\n  // Skip function declarations because control doesn't get pass into it.\n  while (nextSibling != null && nextSibling.isFunction()) {\n    nextSibling = nextSibling.getNext();\n  }\n\n  if (nextSibling != null) {\n    return computeFallThrough(nextSibling);\n  } else {\n    // If there are no more siblings, control is transferred up the AST.\n    return computeFollowNode(fromNode, parent, cfa);\n  }\n}"
+            }
+        },
+        "bug_count": 1,
+        "triggered_tests": {
+            "0": {
+                "test_path": "com.google.javascript.jscomp.CheckMissingReturnTest",
+                "test_method": "testIssue779",
+                "test_code": "testIssue779() {\n    testNotMissing(\n        \"var a = f(); try { alert(); if (a > 0) return 1; }\" +\n        \"finally { a = 5; } return 2;\");\n  }",
+                "clean_err_msg": "junit.framework.AssertionFailedError: Unexpected error(s): JSC_MISSING_RETURN_STATEMENT. Missing return statement. Function expected to return number. at testcode line 1 : 24 expected:<0> but was:<1>"
+            },
+            "1": {
+                "test_path": "com.google.javascript.jscomp.ControlFlowAnalysisTest",
+                "test_method": "testDeepNestedFinally",
+                "test_code": "testDeepNestedFinally() {\n    String src = \"try{try{try{throw 1}\" +\n        \"finally{1;var a}}finally{2;if(a);}}finally{3;a()}\";\n    ControlFlowGraph<Node> cfg = createCfg(src);\n    assertCrossEdge(cfg, Token.THROW, Token.BLOCK, Branch.ON_EX);\n    assertCrossEdge(cfg, Token.VAR, Token.BLOCK, Branch.UNCOND);\n    assertCrossEdge(cfg, Token.IF, Token.BLOCK, Branch.ON_EX);\n  }",
+                "clean_err_msg": "junit.framework.AssertionFailedError: No cross edges found"
+            },
+            "2": {
+                "test_path": "com.google.javascript.jscomp.ControlFlowAnalysisTest",
+                "test_method": "testDeepNestedBreakwithFinally",
+                "test_code": "testDeepNestedBreakwithFinally() {\n    String src = \"X:while(1){try{while(2){try{var a;break X;}\" +\n        \"finally{}}}finally{}}\";\n    ControlFlowGraph<Node> cfg = createCfg(src);\n    assertDownEdge(cfg, Token.WHILE, Token.BLOCK, Branch.ON_TRUE);\n    assertDownEdge(cfg, Token.BLOCK, Token.TRY, Branch.UNCOND);\n    assertDownEdge(cfg, Token.BLOCK, Token.VAR, Branch.UNCOND);\n    // BREAK to FINALLY.\n    assertCrossEdge(cfg, Token.BREAK, Token.BLOCK, Branch.UNCOND);\n    // FINALLY to FINALLY.\n    assertCrossEdge(cfg, Token.BLOCK, Token.BLOCK, Branch.ON_EX);\n    assertCrossEdge(cfg, Token.WHILE, Token.BLOCK, Branch.ON_FALSE);\n    assertReturnEdge(cfg, Token.BLOCK);\n  }",
+                "clean_err_msg": "junit.framework.AssertionFailedError: No cross edges found"
+            }
+        },
+        "buggy_files": {
+            "0": "src/com/google/javascript/jscomp/ControlFlowAnalysis.java"
+        },
+        "bug_report": {
+            "url": "https://storage.googleapis.com/google-code-archive/v2/code.google.com/closure-compiler/issues/issue-779.json",
+            "bug_description": "bogus 'missing return' warning"
+        },
+        "bug_type": "single_line_bug",
+        "hunk_mapping": {
+            "0": [
+                {
+                    "start_line": 767,
+                    "end_line": 768,
+                    "file": "src/com/google/javascript/jscomp/ControlFlowAnalysis.java",
+                    "code": "<START_BUG>\n              cfa.createEdge(fromNode, Branch.UNCOND, finallyNode);\n            }\n<END_BUG>"
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,55 @@
+{
+    "Chart_8": {
+        "buggy_hunks": {
+            "0": {
+                "start_line": 175,
+                "end_line": 176,
+                "file": "source/org/jfree/data/time/Week.java",
+                "code": "<START_BUG>\n        this(time, RegularTimePeriod.DEFAULT_TIME_ZONE, Locale.getDefault());\n    }\n<END_BUG>"
+            }
+        },
+        "buggy_code": {
+            "0": {
+                "start_line": 173,
+                "end_line": 176,
+                "file": "source/org/jfree/data/time/Week.java",
+                "code": "public Week(Date time, TimeZone zone) {\n    // defer argument checking...\n    this(time, RegularTimePeriod.DEFAULT_TIME_ZONE, Locale.getDefault());\n}"
+            }
+        },
+        "delineated_bug": {
+            "0": {
+                "start_line": 173,
+                "end_line": 176,
+                "file": "source/org/jfree/data/time/Week.java",
+                "code": "public Week(Date time, TimeZone zone) {\n    // defer argument checking...\n<START_BUG>\n    this(time, RegularTimePeriod.DEFAULT_TIME_ZONE, Locale.getDefault());\n}\n<END_BUG>"
+            }
+        },
+        "bug_count": 1,
+        "triggered_tests": {
+            "0": {
+                "test_path": "org.jfree.data.time.junit.WeekTests",
+                "test_method": "testConstructor",
+                "test_code": "testConstructor() {\n        Locale savedLocale = Locale.getDefault();\n        TimeZone savedZone = TimeZone.getDefault();\n        Locale.setDefault(new Locale(\"da\", \"DK\"));\n        TimeZone.setDefault(TimeZone.getTimeZone(\"Europe/Copenhagen\"));\n        GregorianCalendar cal = (GregorianCalendar) Calendar.getInstance(\n                TimeZone.getDefault(), Locale.getDefault());\n\n        // first day of week is monday\n        assertEquals(Calendar.MONDAY, cal.getFirstDayOfWeek());\n        cal.set(2007, Calendar.AUGUST, 26, 1, 0, 0);\n        cal.set(Calendar.MILLISECOND, 0);\n        Date t = cal.getTime();\n        Week w = new Week(t, TimeZone.getTimeZone(\"Europe/Copenhagen\"));\n        assertEquals(34, w.getWeek());\n\n        Locale.setDefault(Locale.US);\n        TimeZone.setDefault(TimeZone.getTimeZone(\"US/Detroit\"));\n        cal = (GregorianCalendar) Calendar.getInstance(TimeZone.getDefault());\n        // first day of week is Sunday\n        assertEquals(Calendar.SUNDAY, cal.getFirstDayOfWeek());\n        cal.set(2007, Calendar.AUGUST, 26, 1, 0, 0);\n        cal.set(Calendar.MILLISECOND, 0);\n\n        t = cal.getTime();\n        w = new Week(t, TimeZone.getTimeZone(\"Europe/Copenhagen\"));\n        assertEquals(35, w.getWeek());\n        w = new Week(t, TimeZone.getTimeZone(\"Europe/Copenhagen\"),\n                new Locale(\"da\", \"DK\"));\n        assertEquals(34, w.getWeek());\n\n        Locale.setDefault(savedLocale);\n        TimeZone.setDefault(savedZone);\n    }",
+                "clean_err_msg": "junit.framework.AssertionFailedError: expected:<35> but was:<34>"
+            }
+        },
+        "buggy_files": {
+            "0": "source/org/jfree/data/time/Week.java"
+        },
+        "bug_report": {
+            "url": "UNKNOWN",
+            "bug_description": ""
+        },
+        "bug_type": "single_line_bug",
+        "hunk_mapping": {
+            "0": [
+                {
+                    "start_line": 175,
+                    "end_line": 176,
+                    "file": "source/org/jfree/data/time/Week.java",
+                    "code": "<START_BUG>\n        this(time, RegularTimePeriod.DEFAULT_TIME_ZONE, Locale.getDefault());\n    }\n<END_BUG>"
+                }
+            ]
+        }
+    }
+}

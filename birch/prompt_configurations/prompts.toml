@@ -1,0 +1,156 @@
+[prompt_buggy_code]
+template = """
+{{ prompt_header }}
+
+Instructions:
+1. Carefully read the Java code below. Buggy regions are explicitly marked between `<START_BUG>` and `<END_BUG>`.
+2. Based on this understanding, generate the corrected version of the code.
+3. Your output must contain **only the corrected Java code**—no comments, explanations, or formatting wrappers like triple backticks.
+4. Please only provide the code in Java. Every single bug will be in Java.
+5. Do not change Java version, formatting, or naming conventions.
+6. If `<START_BUG>` and `<END_BUG>` enclose nothing, this indicates an **insertion**; insert new code at that location.
+
+Buggy Java Code:
+{{ buggy_code }},
+
+Please return only the corrected code. Do not provide comments, explanations, or any additional text. Return only the corrected code.
+"""
+
+[prompt_delineation]
+template = """
+{{ prompt_header }}
+
+Instructions:
+1. Carefully read the Java code below. Buggy regions are explicitly marked between `<START_BUG>` and `<END_BUG>`.
+2. Based on this understanding, generate the corrected version of the code.
+3. Your output must contain **only the corrected Java code**—no comments, explanations, or formatting wrappers like triple backticks.
+4. Please only provide the code in Java. Every single bug will be in Java.
+5. Do not change Java version, formatting, or naming conventions.
+6. If `<START_BUG>` and `<END_BUG>` enclose nothing, this indicates an **insertion**; insert new code at that location.
+
+Buggy Java Code:
+{{ delineated_bug }}
+
+Please return only the corrected code. Do not provide comments, explanations, or any additional text. Return only the corrected code.
+"""
+
+[prompt_description_delineation]
+template = """
+{{ prompt_header }}
+
+Bug Description:
+{{ bug_description_title }}
+{{ bug_description }}
+
+Instructions:
+1. Carefully read the Java code below. Buggy regions are explicitly marked between `<START_BUG>` and `<END_BUG>`.
+2. Use the bug description to guide your understanding and correction.
+3. Based on this understanding, generate the corrected version of the code.
+4. Your output must contain **only the corrected Java code**—no comments, explanations, or formatting wrappers like triple backticks.
+5. Please only provide the code in Java. Every single bug will be in Java.
+6. Do not change Java version, formatting, or naming conventions.
+7. If `<START_BUG>` and `<END_BUG>` enclose nothing, this indicates an **insertion**; insert new code at that location.
+
+Buggy Java Code:
+{{ delineated_bug }}
+
+Please return only the corrected code. Do not provide comments, explanations, or any additional text. Return only the corrected code.
+"""
+
+[prompt_description_delineation_test_information]
+template = """
+{{ prompt_header }}
+
+Bug Description:
+{{ bug_description_title }}
+{{ bug_description }}
+
+Instructions:
+1. Carefully read the Java code below. Buggy regions are explicitly marked between `<START_BUG>` and `<END_BUG>`.
+2. Use the bug description to guide your understanding and correction.
+3. Use the failing test cases and error messages to further diagnose the issue.
+4. Based on this understanding, generate the corrected version of the code.
+5. Your output must contain **only the corrected Java code**—no comments, explanations, or formatting wrappers like triple backticks.
+6. Please only provide the code in Java. Every single bug will be in Java.
+7. If `<START_BUG>` and `<END_BUG>` enclose nothing, this indicates an **insertion**; insert new code at that location.
+8. Omit `<START_BUG>` and `<END_BUG>` markers from your output.
+9. Provide the full corrected version of the entire method after applying your fix:
+   - You **must return the full method**, not only the modified lines.
+   - **Include all lines**, even those that were not changed, to ensure the method is contextually and syntactically complete.
+   - The returned method must be a valid, self-contained Java method with no syntax errors.
+   - Retain all unchanged code from the original method exactly as it was.
+
+Buggy Java Code:
+{{ javadoc }}
+{{ delineated_bug }}
+
+Test Failures:
+{{ test_info_str }}
+
+Please return only the corrected code. Do not provide comments, explanations, or any additional text. Return only the corrected code.
+"""
+
+[prompt_description_delineation_test_information_class]
+template = """
+{{ prompt_header }}
+
+Bug Description:
+{{ bug_description_title }}
+{{ bug_description }}
+
+Instructions:
+1. Carefully read the Java code below. Buggy regions are explicitly marked between `<START_BUG>` and `<END_BUG>`.
+2. Use the bug description to guide your understanding and correction.
+3. Use the failing test cases and error messages to further diagnose the issue.
+4. Based on this understanding, generate the corrected version of the code.
+5. Your output must contain **only the corrected Java code**—no comments, explanations, or formatting wrappers like triple backticks.
+6. Please only provide the code in Java. Every single bug will be in Java.
+7. If `<START_BUG>` and `<END_BUG>` enclose nothing, this indicates an **insertion**; insert new code at that location.
+8. Omit `<START_BUG>` and `<END_BUG>` markers from your output.
+9. Provide the full corrected version of the entire class after applying your fix:
+   - You **must return the full class**, not only the modified lines.
+   - **Include all lines**, even those that were not changed, to ensure the class is contextually and syntactically complete.
+   - The returned class must be a valid, self-contained Java class with no syntax errors.
+   - Retain all unchanged code from the original class exactly as it was.
+   
+Buggy Java Code:
+{{ javadoc }}
+{{ delineated_bug }}
+
+Test Failures:
+{{ test_info_str }}
+
+Return only the full corrected Java class code. Do not provide comments, explanations, or any additional text.
+"""
+
+[prompt_description_delineation_test_information_file]
+template = """
+{{ prompt_header }}
+
+Bug Description:
+{{ bug_description_title }}
+{{ bug_description }}
+
+Instructions:
+1. Carefully read the Java code below. Buggy regions are explicitly marked between `<START_BUG>` and `<END_BUG>`.
+2. Use the bug description to guide your understanding and correction.
+3. Use the failing test cases and error messages to further diagnose the issue.
+4. Based on this understanding, generate the corrected version of the code.
+5. Your output must contain **only the corrected Java code**—no comments, explanations, or formatting wrappers like triple backticks.
+6. Please only provide the code in Java. Every single bug will be in Java.
+7. If `<START_BUG>` and `<END_BUG>` enclose nothing, this indicates an **insertion**; insert new code at that location.
+8. Omit `<START_BUG>` and `<END_BUG>` markers from your output.
+9. Provide the full corrected version of the entire file after applying your fix:
+   - You **must return the full file**, not only the modified lines.
+   - **Include all lines**, even those that were not changed, to ensure the file is contextually and syntactically complete.
+   - The returned file must be a valid, self-contained Java file with no syntax errors.
+   - Retain all unchanged code from the original file exactly as it was.
+
+Buggy Java Code:
+{{ delineated_bug }}
+
+Test Failures:
+{{ test_info_str }}
+
+Return only the full corrected Java file code. Do not provide comments, explanations, or any additional text.
+"""
