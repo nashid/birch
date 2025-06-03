@@ -4,7 +4,7 @@ This folder contains three Python scripts for running Defects4J bug‐repair exp
 
 ---
 
-## 1. Feedback‐Loop Only
+## 1. Feedback‐Loop
 
 **Purpose**
 When a patch candidate compiles but fails tests, this script invokes a feedback loop to re‐generate/repair until either the tests pass or a maximum number of iterations is reached.
@@ -65,7 +65,7 @@ python d4j_code_repair_feedback_loop.py \
 
 ---
 
-## 2. Standard “Redwood” Mode
+## 2. Feedback with Retriveal Based Example Selection
 
 **Purpose**
 This script runs the regular (non–feedback‐loop) repair pipeline. It submits one patch‐generation request per iteration. On test failures, it retrieves a similar example from a chosen retrieval strategy, then continues. On compilation failures, it reports the compile error and halts or moves to the next bug.
@@ -161,7 +161,7 @@ python d4j_code_repair_feedback_loop.py \
 
 ---
 
-## 3. Algorithm‐Comparison Mode
+## 3. Retrieval-Based Similar Example Selection
 
 **Purpose**
 Runs a single pass (no feedback loop) to compare different retrieval algorithms (e.g. “ada-rag” vs “emb-rag” vs “rag”). Useful to generate one patch per bug from each strategy, and measure differences.
