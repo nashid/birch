@@ -1,4 +1,4 @@
-# Defects4J Code Repair Program
+# BIRCH Code Repair Program
 
 ## Purpose of the Script
 This script is designed to automate the process of generating, applying, and testing fixes for bugs in the Defects4J dataset using various large language models (LLMs). It builds different types of prompts based on the input mode, sends them to an LLM to suggest fixes, applies the fix, and then compiles and tests the modified code to verify if the LLM-produced fix resolves the bug.
