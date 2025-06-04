@@ -2,8 +2,6 @@
 
 This folder contains three Python scripts for running Defects4J bug‐repair experiments. Each script implements a different “mode” of operation and accepts a largely overlapping set of command‐line arguments. Below is a brief description of each script, along with a consolidated list of their command‐line flags, defaults, and usage examples.
 
----
-
 ## 1. Feedback‐Loop
 
 **Purpose**
@@ -62,8 +60,6 @@ python d4j_code_repair_feedback_loop.py \
   --multihunk=no \
   --max_iterations=5
 ```
-
----
 
 ## 2. Feedback with Retriveal Based Example Selection
 
@@ -158,8 +154,6 @@ python d4j_code_repair_feedback_loop.py \
   --max_iterations=3 \
   --scope=class
 ```
-
----
 
 ## 3. Retrieval-Based Similar Example Selection
 
