@@ -14,6 +14,10 @@ This repository contains two main experiments:
    All code for the prompt-augmentation experiments can be found in the  
    [`birch_augmented_prompting`](./birch_augmented_prompting) folder.
 
+3. **Hunk4J**  
+   Metadata, raw patch files, and code to extract metadata can be found in the
+   [`birch_augmented_prompting`](./Hunk4J) folder.
+
 ## Project Structure
 ```
 .
