@@ -4,15 +4,15 @@
 
 ![BIRCH: Benchmarking Infrastructure for Repairing Code Hunks](images/birch-image.png)
 
-This repository contains two main experiments:
+This repository contains three main experiments:
 
 1. **LLM-Only Experiment**  
    All code for the LLM-only study can be found in the  
-   [`birch_llm_prompting`](./birch_llm_prompting) folder.
+   [`birch_llm_prompting`](./birch_llm_prompting) folder. **This folder is a *symlink* to the directory *birch* which contains the code.**
 
 2. **Prompt Augmentations**  
    All code for the prompt-augmentation experiments can be found in the  
-   [`birch_augmented_prompting`](./birch_augmented_prompting) folder.
+   [`birch_augmented_prompting`](./birch_augmented_prompting) folder. **This folder is a *symlink* to the directory *redwood* which contains the code.**
 
 3. **Hunk4J**  
    Metadata, raw patch files, and code to extract metadata can be found in the
@@ -30,7 +30,7 @@ This repository contains two main experiments:
 │   │   └── method-line-extractor
 │   └── patches                       # Raw `.patch` files for bugs
 │
-├── birch-llm-prompting
+├── birch
 │   ├── README.md                     # LLM-only repair workflow instructions
 │   ├── llm                           # LLM API wrappers and model definitions
 │   ├── prompt_configurations         # Prompt templates (e.g., `prompts.toml`)
@@ -38,7 +38,7 @@ This repository contains two main experiments:
 │   ├── utils                         # Defects4J and LLM helper utilities
 │   └── scripts …                     # Scripts for checkout, repair, validation, and result summarization
 │
-├── birch-augmented-prompting
+├── redwood
 │   ├── README.md                     # Augmented-technique workflow instructions
 │   ├── algorithms                    # Similar-example retrieval, AST/embedding algorithms, etc.
 │   ├── hunk4j_statistics             # Scripts & CSVs for multi-hunk descriptive statistics
@@ -50,6 +50,9 @@ This repository contains two main experiments:
 │   ├── solved_bugs_statistics        # CSV reports of which bugs each LLM solved (per scope)
 │   └── utils                         # Feedback-loop and general utilities
 │
+├── birch-llm-prompting -> birch # symlink (LLM-only workflow)
+├── birch-augmented-prompting -> redwood # symlink (augmented workflow)
+|
 ├── images                            # Repository-wide image assets (e.g., birch-image.png)
 └── README.md                         # (this file)
 ```
