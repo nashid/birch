@@ -1,6 +1,0 @@
-bug_id,divergence,proximity_class
-JxPath-20,0.3902,Cluster
-Lang-64,0.2128,Cluster
-Math-15,0.3044,Cluster
-Math-77,0.3020,Orbit
-TOTAL,0.3024,Cluster:3; Orbit:1
